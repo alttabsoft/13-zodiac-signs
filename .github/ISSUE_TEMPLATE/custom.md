@@ -1,7 +1,7 @@
 ---
 name: Custom issue template
 about: Describe this issue template's purpose here.
-title: ''
+title: '[FEAT/SETTING/DESIGN/FIX/REFACTOR/DOCS] 제목 추가'
 labels: ''
 assignees: ''
 
