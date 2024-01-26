@@ -7,17 +7,17 @@ assignees: ''
 
 ---
 
-📌 Issue
+Issue
 
 - client에서 POST 요청이 들어왔어요
 
-## 📸 ScreenShot
+## ScreenShot
 |기능|스크린샷|
 |:--:|:--:|
 ||<img src = "">
 ||<img src = "">
 
-## 📝 To-do
+## To-do
 - [ ]
 
 
