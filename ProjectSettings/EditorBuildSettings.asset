@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/13-zodiac-sign/Scenes/BattleScene.unity
+    guid: 25849da821d11e0489ab8e960c8e112b
+  - enabled: 1
+    path: Assets/13-zodiac-sign/Scenes/CubeScene.unity
+    guid: 685e263120e6fa345a54de7b46093182
+  - enabled: 1
+    path: Assets/13-zodiac-sign/Scenes/MainMenuScene.unity
+    guid: 41a5dd981aba65749bca643b59069c6a
   m_configObjects: {}
