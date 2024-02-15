@@ -94,9 +94,8 @@ public class ReadCube : MonoBehaviour
         foreach (GameObject rayStart in rayStarts)
         {
             Vector3 ray = rayStart.transform.position;
-            RaycastHit[] hits;
-
-            hits = Physics.RaycastAll(ray, rayTransform.forward, Mathf.Infinity);
+            RaycastHit[] hits = new RaycastHit[126];
+            Physics.RaycastNonAlloc(ray, rayTransform.forward, hits, 126); 
 
             if (hits.Length > 0)
             {
@@ -104,7 +103,7 @@ public class ReadCube : MonoBehaviour
                 
                 foreach (RaycastHit hit in hits)
                 {
-                    if (hit.collider.gameObject.CompareTag(tagName))
+                    if (hit.collider != null && hit.collider.gameObject.CompareTag(tagName))
                     {
                         Debug.DrawRay(ray, rayTransform.forward * hit.distance, Color.red);
                         newList.Add(hit.collider.gameObject);
