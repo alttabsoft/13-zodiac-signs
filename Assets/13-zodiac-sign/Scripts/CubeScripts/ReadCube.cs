@@ -19,7 +19,6 @@ public class ReadCube : MonoBehaviour
     private List<GameObject> leftRays = new List<GameObject>();
     private List<GameObject> rightRays = new List<GameObject>();   
 
-    private int layerMask = 1 << 25; // 현재 면의 25개의 위치
     private string tagName = "Block";
     RotateCube rotateCube;
     public GameObject emptyGO;
