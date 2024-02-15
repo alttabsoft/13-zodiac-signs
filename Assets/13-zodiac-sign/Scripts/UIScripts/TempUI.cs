@@ -36,7 +36,6 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                     });
                 }
             }
-            throw new NotImplementedException();
         }
     }
 }

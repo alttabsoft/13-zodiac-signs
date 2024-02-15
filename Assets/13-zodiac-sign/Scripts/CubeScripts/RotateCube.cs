@@ -17,7 +17,6 @@ public class RotateCube : MonoBehaviour
     public static bool autoRotating = false;
     public static bool started = false;
     
-    float rotSpeed = 100f;
     private Vector3 centerPoint; // 중심점
     private float rotationAmount = 90f; // 회전할 각도
     private float rotationSpeedPerMinute = 90f; // 회전에 소요될 시간 (초)
