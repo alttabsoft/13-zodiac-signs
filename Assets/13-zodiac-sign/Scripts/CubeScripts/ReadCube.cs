@@ -20,17 +20,22 @@ public class ReadCube : MonoBehaviour
     private List<GameObject> rightRays = new List<GameObject>();   
 
     private string tagName = "Block";
-    RotateCube rotateCube;
     public GameObject emptyGO;
-       
+    
+    // ==== 필요없을 시 수정
+    RotateCube rotateCube;
+    // ==== 필요없을 시 수정
+    
     // Start is called before the first frame update
     void Start()
     {
         SetRayTransforms();
 
         rotateCube = FindObjectOfType<RotateCube>();
-        ReadState();
+        ReadState(this, EventArgs.Empty);
         RotateCube.started = true;
+        
+        rotateCube.onCubeRotationEnd += ReadState;
     }
 
     // Update is called once per frame
@@ -38,7 +43,7 @@ public class ReadCube : MonoBehaviour
     {
     }
 
-    public void ReadState()
+    private void ReadState(object sender, EventArgs e)
     {
         // RayCaseAll에서 감지된 모든 블록들의 배열을 가져오기
         // 어떤 색의 면이 어디에 있는지 알 수 있게 됨
@@ -96,7 +101,9 @@ public class ReadCube : MonoBehaviour
             Vector3 ray = rayStart.transform.position;
             RaycastHit[] hits = new RaycastHit[126];
             Physics.RaycastNonAlloc(ray, rayTransform.forward, hits, 126); 
-
+            // hits를 거리순대로 정렬
+            System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+            
             if (hits.Length > 0)
             {
                 List<GameObject> newList = new List<GameObject>();
@@ -107,7 +114,6 @@ public class ReadCube : MonoBehaviour
                     {
                         Debug.DrawRay(ray, rayTransform.forward * hit.distance, Color.red);
                         newList.Add(hit.collider.gameObject);
-                        Debug.Log(hit.collider.gameObject.name);
                     }
                 }
 
