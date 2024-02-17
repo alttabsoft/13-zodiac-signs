@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using System;
 
 public class RotateCube : MonoBehaviour
 {
+    // Event 
+    public event EventHandler onCubeRotationEnd; 
+    
     // sides
     public List<List<GameObject>> front = new List<List<GameObject>>();
     public List<List<GameObject>> back = new List<List<GameObject>>();
@@ -13,68 +15,87 @@ public class RotateCube : MonoBehaviour
     public List<List<GameObject>> down = new List<List<GameObject>>();
     public List<List<GameObject>> left = new List<List<GameObject>>();
     public List<List<GameObject>> right = new List<List<GameObject>>();
-
+    
+    // ===== 필요 없을 시 수정
     public static bool autoRotating = false;
     public static bool started = false;
-    
-    private Vector3 centerPoint; // 중심점
+    // ==== 필요 없을 시 수정
+
+    private bool isRotating = false;
+    private int[] randomLine = new int[3];
     private float rotationAmount = 90f; // 회전할 각도
+    private Vector3 centerPoint; // 중심점
     private float rotationSpeedPerMinute = 90f; // 회전에 소요될 시간 (초)
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-    
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            PressKey(front, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            PressKey(front, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            PressKey(front, 2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        { 
-            PressKey(front, 3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            PressKey(front, 4);
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SwitchRotateDirection();
-        }
-    }
+    private int[] testArray = new int[3] { 0, 1, 2 };
 
-    public void SwitchRotateDirection()
+    private void Awake()
     {
-        if (rotationAmount == 90f)
-        {
-            rotationAmount = -90f;
-        }
-        else
-        {
-            rotationAmount = 90f;
-        }
+        // Cube Manager에 이벤트 추가
+        CubeManager.Instance.tempRotateCube += rotatingCubes;
+            
+        
+        // 랜덤한 라인 인덱스 받아오는 코드
+        // CubeManager.Instance.onCallRotateCube += rotatingCubes;
     }
     
-    public void PressKey(List<List<GameObject>> lists ,int k)
+    // ==== 임의의 3 라인을 회전하는 코드
+    private void rotatingCubes(object sender, EventArgs e)
     {
-        CalculateCenterPoint(lists, k);
-        StartCoroutine(RotateObjectsAroundCenter(lists ,rotationAmount, k)); // 90도, 2초 동안 회전
+        if (isRotating)
+        {
+            return;
+        }
+        
+        // 임의의 3개의 줄 회전
+        StartCoroutine(startToRotateCube());
     }
     
-    public void CalculateCenterPoint(List<List<GameObject>> list, int k)
+    private IEnumerator startToRotateCube()
+    {
+        isRotating = true;
+        // 세로 & 시계 방향 회전
+        yield return StartCoroutine(RotateObjectsAroundCenter(front , Vector3.left, rotationAmount,0));
+        yield return new WaitForSeconds(0.5f);
+        // 가로 & 반시계방향 회전
+        yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount * -1, 1));
+        yield return new WaitForSeconds(0.5f);
+        // 세로 && 시계 방향 회전
+        yield return StartCoroutine(RotateObjectsAroundCenter(front, Vector3.left, rotationAmount, 3));
+        // 회전 방향 변경
+        rotationAmount *= -1;
+        isRotating = false;
+    }
+    // ==== 임의의 3 라인을 회전하는 코드
+    
+    
+    
+    // ==== 랜덤한 라인 인덱스 받아오는 코드
+    // private void rotatingCubes(object sender, CustomEventArgs e)
+    // {
+    //     randomLine = e.MyArray;
+    //     // 임의의 3개의 줄 회전
+    //     StartCoroutine(startToRotateCube());
+    // }
+    //
+    // private IEnumerator startToRotateCube()
+    // {
+    //     // 세로 & 시계 방향 회전
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(front , Vector3.left, rotationAmount,randomLine[0]));
+    //     yield return new WaitForSeconds(0.5f);
+    //     // 가로 & 반시계방향 회전
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount * -1, randomLine[1]));
+    //     yield return new WaitForSeconds(0.5f);
+    //     // 세로 && 시계 방향 회전
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(front, Vector3.left, rotationAmount, randomLine[2]));
+    //     // 회전 방향 변경
+    //     rotationAmount *= -1;
+    // }
+    // ==== 랜덤한 라인 인덱스 받아오는 코드
+    
+    
+    // 회전 하는 면의 중간 큐브를 계산
+    private void CalculateCenterPoint(List<List<GameObject>> list, int k)
     {
         int idx = 0;
         if (list.Count == 0) return;
@@ -95,8 +116,11 @@ public class RotateCube : MonoBehaviour
         centerPoint = sum / list.Count;
     }
 
-    public IEnumerator RotateObjectsAroundCenter(List<List<GameObject>> lists, float totalRotation, int l)
+    // 회전하는 면의 리스트 & 회전 기준축 & 회전 방향 & 회전하는 줄
+    public IEnumerator RotateObjectsAroundCenter(List<List<GameObject>> lists, Vector3 rotationDirection, float totalRotation, int l)
     {
+        CalculateCenterPoint(lists, l); // 회전하는 면의 해당 줄의 중간 큐브를 계산
+        
         float currentRotation = 0;
         float direction = Mathf.Sign(totalRotation); // 회전 방향
 
@@ -111,7 +135,8 @@ public class RotateCube : MonoBehaviour
                 {
                     if (i % 5 == l)
                     {
-                        m.transform.RotateAround(centerPoint, Vector3.left, rotationThisFrame);
+                        // 중간 큐브를 기준으로 rotationDirection(기준이 되는 회전축)으로 회전함
+                        m.transform.RotateAround(centerPoint, rotationDirection, rotationThisFrame);
                     }
                     i++;
                 }
@@ -120,6 +145,7 @@ public class RotateCube : MonoBehaviour
             yield return null;
         }
         
-        
+        // 만약 이벤트 핸들가 비어있지 않다면 함수 호출
+        onCubeRotationEnd?.Invoke(this, EventArgs.Empty);
     }
 }
