@@ -58,10 +58,10 @@ public class RotateCube : MonoBehaviour
         yield return StartCoroutine(RotateObjectsAroundCenter(front , Vector3.left, rotationAmount,0));
         yield return new WaitForSeconds(0.5f);
         // 가로 & 반시계방향 회전
-        yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount * -1, 1));
+        yield return StartCoroutine(RotateObjectsAroundCenter(down, Vector3.up, rotationAmount * -1, 3));
         yield return new WaitForSeconds(0.5f);
         // 세로 && 시계 방향 회전
-        yield return StartCoroutine(RotateObjectsAroundCenter(front, Vector3.left, rotationAmount, 3));
+        yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount, 3));
         // 회전 방향 변경
         rotationAmount *= -1;
         isRotating = false;
