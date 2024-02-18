@@ -6,7 +6,9 @@ using System;
 public class RotateCube : MonoBehaviour
 {
     // Event 
-    public event EventHandler onCubeRotationEnd; 
+    public event EventHandler onCubeRotationEnd;
+    public event EventHandler onSetCubeMap;
+    
     
     // sides
     public List<List<GameObject>> front = new List<List<GameObject>>();
@@ -22,10 +24,10 @@ public class RotateCube : MonoBehaviour
     // ==== 필요 없을 시 수정
 
     private bool isRotating = false;
-    private int[] randomLine = new int[3];
+    private int[] randomLine = new int[5];
     private float rotationAmount = 90f; // 회전할 각도
     private Vector3 centerPoint; // 중심점
-    private float rotationSpeedPerMinute = 90f; // 회전에 소요될 시간 (초)
+    private float rotationSpeedPerMinute = 270f; // 회전에 소요될 시간 (초)
 
     private int[] testArray = new int[3] { 0, 1, 2 };
 
@@ -46,7 +48,6 @@ public class RotateCube : MonoBehaviour
         {
             return;
         }
-        
         // 임의의 3개의 줄 회전
         StartCoroutine(startToRotateCube());
     }
@@ -54,16 +55,18 @@ public class RotateCube : MonoBehaviour
     private IEnumerator startToRotateCube()
     {
         isRotating = true;
-        // 세로 & 시계 방향 회전
+        // 세로
         yield return StartCoroutine(RotateObjectsAroundCenter(front , Vector3.left, rotationAmount,0));
-        yield return new WaitForSeconds(0.5f);
-        // 가로 & 반시계방향 회전
+        yield return new WaitForSeconds(0.1f);
+        // 가로 
         yield return StartCoroutine(RotateObjectsAroundCenter(down, Vector3.up, rotationAmount * -1, 3));
-        yield return new WaitForSeconds(0.5f);
-        // 세로 && 시계 방향 회전
+        yield return new WaitForSeconds(0.1f);
+        // 세로 
         yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount, 3));
-        // 회전 방향 변경
+        // 회전 방향 변경 (CW -> CCW -> CW 반복)
         rotationAmount *= -1;
+        // 모든 큐브의 회전이 끝냈을 때 이벤트 호출
+        onSetCubeMap?.Invoke(this, EventArgs.Empty);
         isRotating = false;
     }
     // ==== 임의의 3 라인을 회전하는 코드
@@ -73,6 +76,11 @@ public class RotateCube : MonoBehaviour
     // ==== 랜덤한 라인 인덱스 받아오는 코드
     // private void rotatingCubes(object sender, CustomEventArgs e)
     // {
+    //     if (isRotating)
+    //     {
+    //         return;
+    //     }
+    //     
     //     randomLine = e.MyArray;
     //     // 임의의 3개의 줄 회전
     //     StartCoroutine(startToRotateCube());
@@ -80,16 +88,24 @@ public class RotateCube : MonoBehaviour
     //
     // private IEnumerator startToRotateCube()
     // {
+    //     isRotating = true;
+    //     
+    //     int rotatingAxis1 = randomLine[3] % 2;
+    //     int rotatingAxis2 = randomLine[4] % 2;
+    //     
     //     // 세로 & 시계 방향 회전
-    //     yield return StartCoroutine(RotateObjectsAroundCenter(front , Vector3.left, rotationAmount,randomLine[0]));
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(rotatingAxis1 == 0 ? front : left, rotatingAxis1 == 0 ? Vector3.left : Vector3.forward, rotationAmount,randomLine[0]));
     //     yield return new WaitForSeconds(0.5f);
     //     // 가로 & 반시계방향 회전
-    //     yield return StartCoroutine(RotateObjectsAroundCenter(left, Vector3.forward, rotationAmount * -1, randomLine[1]));
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(down, Vector3.up, rotationAmount * -1, randomLine[1]));
     //     yield return new WaitForSeconds(0.5f);
     //     // 세로 && 시계 방향 회전
-    //     yield return StartCoroutine(RotateObjectsAroundCenter(front, Vector3.left, rotationAmount, randomLine[2]));
+    //     yield return StartCoroutine(RotateObjectsAroundCenter(rotatingAxis2 == 0 ? front : left, rotatingAxis2 == 0 ? Vector3.left : Vector3.forward, rotationAmount, randomLine[2]));
     //     // 회전 방향 변경
     //     rotationAmount *= -1;
+    //     // 모든 큐브의 회전이 끝냈을 때
+    //     onSetCubeMap?.Invoke(this, EventArgs.Empty);
+    //     isRotating = false;
     // }
     // ==== 랜덤한 라인 인덱스 받아오는 코드
     
