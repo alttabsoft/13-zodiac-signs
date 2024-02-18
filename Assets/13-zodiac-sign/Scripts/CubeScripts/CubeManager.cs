@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
+
 public class CubeManager : MonoSingleTon<CubeManager>
 {
     public event EventHandler tempRotateCube;
@@ -13,13 +14,9 @@ public class CubeManager : MonoSingleTon<CubeManager>
     private RotateCube rotateCube;
     private int playerPositionedLine = 99;
 
-
-    private int[] randomLine = new int[3];
+    // 0 - 4 == 선의 인덱스, 5 == 회전축
+    private int[] randomLine = new int[5];  
     
-    private void Start()
-    {
-        rotateCube = FindObjectOfType<RotateCube>();
-    }
 
     private void Update()
     {
@@ -30,14 +27,16 @@ public class CubeManager : MonoSingleTon<CubeManager>
             
             
             // 랜덤 라인 생성
-            // setRandomLine();
+            setRandomLine();
             // onCallRotateCube?.Invoke(this, new CustomEventArgs(randomLine));
         }
     }
+
     
-    
-    
-    
+    // F = Front, L = Left
+    // N % 2
+    // 0 | 1 | 2 | 3 | 4 | 
+    // F | L | F | L | F |
     // ====== 랜덤한 줄 생성을 위한 코드 
     private void rotateCubes(object sender, EventArgs e)
     {
@@ -47,7 +46,7 @@ public class CubeManager : MonoSingleTon<CubeManager>
     private void setRandomLine()
     {
         int idx = 0;
-        while (idx < 3)
+        while (idx < 5)
         {
             int randomNumber = 0;
             
