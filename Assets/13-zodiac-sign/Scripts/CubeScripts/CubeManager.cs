@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 
@@ -27,7 +26,7 @@ public class CubeManager : MonoSingleTon<CubeManager>
             
             
             // 랜덤 라인 생성
-            setRandomLine();
+            // setRandomLine();
             // onCallRotateCube?.Invoke(this, new CustomEventArgs(randomLine));
         }
     }
@@ -55,9 +54,7 @@ public class CubeManager : MonoSingleTon<CubeManager>
                 randomNumber = Random.Range(0, 5);
                 
             } while (randomNumber == playerPositionedLine);
-            
-            Debug.Log($"나의 랜덤 숫자 {randomNumber}");
-            
+
             randomLine[idx] = randomNumber;
             idx++;
         }

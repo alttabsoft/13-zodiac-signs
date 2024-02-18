@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,9 +21,7 @@ public class ReadCube : MonoBehaviour
     private string tagName = "Block";
     public GameObject emptyGO;
     
-    // ==== 필요없을 시 수정
     RotateCube rotateCube;
-    // ==== 필요없을 시 수정
     
     // Start is called before the first frame update
     void Start()
@@ -33,14 +30,8 @@ public class ReadCube : MonoBehaviour
 
         rotateCube = FindObjectOfType<RotateCube>();
         ReadState(this, EventArgs.Empty);
-        RotateCube.started = true;
         
         rotateCube.onCubeRotationEnd += ReadState;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     private void ReadState(object sender, EventArgs e)
@@ -54,8 +45,7 @@ public class ReadCube : MonoBehaviour
         rotateCube.front = ReadFace(frontRays, tFront);
         rotateCube.back = ReadFace(backRays, tBack);
     }
-
-
+    
     void SetRayTransforms()
     {
         // Ray 위치에서 큐브의 중앙으로 RayCastAll을 하기

@@ -5,10 +5,10 @@ using System;
 
 public class RotateCube : MonoBehaviour
 {
-    // Event 
-    public event EventHandler onCubeRotationEnd;
-    public event EventHandler onSetCubeMap;
-    
+    // ===== Event Handlers 
+    public event EventHandler onCubeRotationEnd;    // 하나의 면이 회전이 끝나면 호출됨 
+    public event EventHandler onSetCubeMap;         // 큐브의 3면이 회전이 끝나면 호출됨
+    // ===== Event Handlers  
     
     // sides
     public List<List<GameObject>> front = new List<List<GameObject>>();
@@ -17,19 +17,12 @@ public class RotateCube : MonoBehaviour
     public List<List<GameObject>> down = new List<List<GameObject>>();
     public List<List<GameObject>> left = new List<List<GameObject>>();
     public List<List<GameObject>> right = new List<List<GameObject>>();
-    
-    // ===== 필요 없을 시 수정
-    public static bool autoRotating = false;
-    public static bool started = false;
-    // ==== 필요 없을 시 수정
 
     private bool isRotating = false;
     private int[] randomLine = new int[5];
     private float rotationAmount = 90f; // 회전할 각도
     private Vector3 centerPoint; // 중심점
     private float rotationSpeedPerMinute = 270f; // 회전에 소요될 시간 (초)
-
-    private int[] testArray = new int[3] { 0, 1, 2 };
 
     private void Awake()
     {
