@@ -30,16 +30,16 @@ public class Player : MonoBehaviour
     
     public bool Move(int x, int y, ref bool[,] r)
     {
-        if (x >= 0 && x < 5 && y >= 0 && y < 5)
+        if (x >= -2 && x < 3 && y >= -2 && y < 3)
         {
-            Player p = BoardManager.Instance.PlayerAxis[x, y];
+            Player p = BoardManager.Instance.PlayerAxis[x + 2, y + 2];
             
             if (p == null)
-                r[x, y] = true;
+                r[x + 2, y + 2] = true;
             else
             {
                 if (isPlayer != p.isPlayer)
-                    r[x, y] = true;
+                    r[x + 2, y + 2] = true;
                 return true;
             }
         }

@@ -4694,7 +4694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7544dc7be9b0d42eda5b9dae33b10bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightPrefab: {fileID: 0}
+  highlightPrefab: {fileID: 6699186983585396709, guid: a14508a8441ec470f9ac724e13328fd7,
+    type: 3}
 --- !u!1001 &815900081
 PrefabInstance:
   m_ObjectHideFlags: 0
