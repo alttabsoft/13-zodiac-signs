@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 public class CharacterMove : FloatingJoystick
 {
     private GameObject player;
+    //[SerializeField] GameObject playerBody;
 
-    private CharacterController _characterController;
+    private CharacterController playerCharacterController;
+    //private CharacterController playerBodyCharacterController;
 
     private bool isTriggerDown = false;
     
@@ -17,7 +19,10 @@ public class CharacterMove : FloatingJoystick
         base.Start();
         background.gameObject.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
-        _characterController = player.GetComponent<CharacterController>();
+        //playerBody= GameObject.FindGameObjectWithTag("PlayerBody").gameObject;
+        
+        playerCharacterController = player.GetComponent<CharacterController>();
+        //playerBodyCharacterController = playerBody.GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -35,25 +40,40 @@ public class CharacterMove : FloatingJoystick
         background.gameObject.SetActive(false);
         base.OnPointerUp(eventData);
     }
-    
+
+
+
     void FixedUpdate()
     {
         if (isTriggerDown)
         {
-            if (player.transform.position.z <= -6.94532)
+            if (player.transform.position.z <= -6.07)
             {
-                _characterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
-
+                if (player.transform.position.z >= -6.62429)
+                {
+                    playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                }
+                else
+                { 
+                    if (this.Vertical >= 0)
+                    {
+                        playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    }
+                    else
+                    {
+                        playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                    }
+                }
             }
             else
             {
                 if (this.Vertical <= 0)
                 {
-                    _characterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                 }
                 else
                 {
-                    _characterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                    playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
                 }
             }
         }
