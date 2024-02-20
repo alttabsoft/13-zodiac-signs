@@ -16,9 +16,6 @@ public class BoardManager : MonoBehaviour
         get;
         set;
     }
-
-    private float rawSelectionX = 0.0f;
-    private float rawSelectionY = 0.0f;
     
     private int selectionX = -1;
     private int selectionY = -1;
@@ -82,12 +79,9 @@ public class BoardManager : MonoBehaviour
         if (Input.GetKey("escape"))
             Application.Quit();
     }
-
-    // TODO: 유저턴으로 넘어오면 자동으로 SelectPlayer 상태로 바꾸기
+    
     private void SelectPlayer(int x, int y)
     {
-        Debug.Log("X: " + x + " Y: " + y);
-        Debug.Log("X hit point: " + rawSelectionX + " Y hit point: " + rawSelectionY);
         if (PlayerAxis[x + 2, y + 2] == null) return;
 
         if (PlayerAxis[x + 2, y + 2].isPlayer != isPlayerTurn) return;
@@ -145,10 +139,6 @@ public class BoardManager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50.0f, LayerMask.GetMask("CubeBoardPlane")))
         {
-            rawSelectionX = hit.point.x;
-            rawSelectionY = hit.point.z;
-            // selectionX = (int)(hit.point.x + 0.5f);
-            // selectionY = (int)(hit.point.z + 0.5f);
             if (hit.point.x > 0.5)
             {
                 selectionX = (int)(hit.point.x + 0.5f);
@@ -198,11 +188,6 @@ public class BoardManager : MonoBehaviour
         go.transform.localScale = temp;
         
         go.transform.SetParent(transform);
-        if (go.GetComponent<Player>() == null)
-        {
-            Debug.LogError("Player component not found on instantiated GameObject.");
-            return;
-        }
         PlayerAxis[x + 2, y + 2] = go.GetComponent<Player>();
         PlayerAxis[x + 2, y + 2].SetPosition(x, y);
         activePlayer.Add(go);
