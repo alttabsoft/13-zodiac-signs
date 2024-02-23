@@ -26,10 +26,12 @@ public class CharacterJump : MonoBehaviour
     }
     private IEnumerator PlayerJump()
     {
+        var jumpWeight = 0.03f;
+        
         while (jumpCount < 10)
         {
             jumpCount++;
-            playerBodyCharacterController.Move(new Vector3(0,0,2) * Time.deltaTime);
+            playerBodyCharacterController.Move(new Vector3(0,0,2) * jumpWeight);
             yield return new WaitForFixedUpdate();
         }
         jumpCount = 0;
@@ -37,7 +39,7 @@ public class CharacterJump : MonoBehaviour
         while (jumpCount < 10)
         {
             jumpCount++;
-            playerBodyCharacterController.Move(new Vector3(0,0,-2) * Time.deltaTime);
+            playerBodyCharacterController.Move(new Vector3(0,0,-2) * jumpWeight);
             yield return new WaitForFixedUpdate();
         }
         jumpCount = 0;
