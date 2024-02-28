@@ -33,7 +33,7 @@ public class PlayerHit : MonoBehaviour
     private IEnumerator MobRespawn(GameObject mob)
     {
         mob.SetActive(false);
-        mob.transform.position = new Vector3(1.2f, 0.9f, -6f);
+        mob.transform.position = new Vector3(1.54f, 0.9f, -5.01f);
         yield return new WaitForSeconds(0.5f);
         mob.SetActive(true);
     }

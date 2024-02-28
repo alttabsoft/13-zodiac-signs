@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 public class CharacterMove : FloatingJoystick
 {
     private GameObject player;
+    private GameObject shadow;
     //[SerializeField] GameObject playerBody;
 
     private CharacterController playerCharacterController;
+    private CharacterController shadowCharacterController;
     //private CharacterController playerBodyCharacterController;
 
     private bool isTriggerDown = false;
@@ -19,9 +21,11 @@ public class CharacterMove : FloatingJoystick
         base.Start();
         background.gameObject.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
+        shadow = GameObject.FindGameObjectWithTag("Shadow").gameObject;
         //playerBody= GameObject.FindGameObjectWithTag("PlayerBody").gameObject;
         
         playerCharacterController = player.GetComponent<CharacterController>();
+        shadowCharacterController = shadow.GetComponent<CharacterController>();
         //playerBodyCharacterController = playerBody.GetComponent<CharacterController>();
     }
 
@@ -47,21 +51,24 @@ public class CharacterMove : FloatingJoystick
     {
         if (isTriggerDown)
         {
-            if (player.transform.position.z <= -6.07)
+            if (player.transform.position.z <= -5)
             {
-                if (player.transform.position.z >= -6.62429)
+                if (player.transform.position.z >= -5.48)
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                 }
                 else
                 { 
                     if (this.Vertical >= 0)
                     {
                         playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                        shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                     }
                     else
                     {
                         playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                        shadowCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
                     }
                 }
             }
@@ -70,10 +77,12 @@ public class CharacterMove : FloatingJoystick
                 if (this.Vertical <= 0)
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                 }
                 else
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
                 }
             }
         }
