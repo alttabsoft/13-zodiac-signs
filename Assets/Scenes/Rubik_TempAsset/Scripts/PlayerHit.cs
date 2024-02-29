@@ -54,5 +54,11 @@ public class PlayerHit : MonoBehaviour
                 StartCoroutine(MobRespawn(other.gameObject));
             }
         }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            StartCoroutine(HitEffect());
+            other.gameObject.SetActive(false);
+        }
     }
 }

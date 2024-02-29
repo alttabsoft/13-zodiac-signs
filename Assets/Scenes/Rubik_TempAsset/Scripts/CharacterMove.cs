@@ -51,6 +51,17 @@ public class CharacterMove : FloatingJoystick
     {
         if (isTriggerDown)
         {
+            if (this.Horizontal < 0)
+            {
+                player.transform.localScale = new Vector3(-0.54f, 0.54f, 0.54f);
+                shadow.transform.localScale = new Vector3(-0.43f, 0.43f, 0.43f);
+            }
+            else
+            {
+                player.transform.localScale = new Vector3(0.54f, 0.54f, 0.54f);
+                shadow.transform.localScale = new Vector3(0.43f, 0.43f, 0.43f);
+            }
+            
             if (player.transform.position.z <= -5)
             {
                 if (player.transform.position.z >= -5.48)
