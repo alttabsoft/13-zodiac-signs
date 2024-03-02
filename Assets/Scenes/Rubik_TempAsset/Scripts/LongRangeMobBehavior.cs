@@ -7,7 +7,8 @@ public class LongRangeMobMove : MonoBehaviour
     private GameObject shadow;
     [SerializeField] private GameObject longRangeMob;
     [SerializeField] private GameObject bullet;
-
+    [SerializeField] private BulletStatus bulletStatus;
+    
     private CharacterController bulletMoveController;
     private int attackCounter = 0;
     // Start is called before the first frame update
@@ -28,6 +29,7 @@ public class LongRangeMobMove : MonoBehaviour
         {
             bullet.transform.position = longRangeMob.transform.position;
             bullet.SetActive(true);
+            bulletStatus.bulletActiveState = true;
             attackCounter = 0;
         }
     }
@@ -36,8 +38,11 @@ public class LongRangeMobMove : MonoBehaviour
     {
         while (true)
         {
+            if (bulletStatus.bulletActiveState)
+            {
+                bulletMoveController.Move(new Vector3(-1,0,0) * 0.1f);
+            }
             yield return new WaitForFixedUpdate();
-            bulletMoveController.Move(new Vector3(-1,0,0) * 0.1f);
         }
     }
 }

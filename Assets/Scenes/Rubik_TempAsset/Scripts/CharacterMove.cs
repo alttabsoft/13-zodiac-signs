@@ -7,29 +7,28 @@ public class CharacterMove : FloatingJoystick
 {
     private GameObject player;
     private GameObject shadow;
-    //[SerializeField] GameObject playerBody;
 
     private CharacterController playerCharacterController;
     private CharacterController shadowCharacterController;
-    //private CharacterController playerBodyCharacterController;
+
+    private SpriteRenderer playerSpriteRenderer;
+    private SpriteRenderer shadowSpriteRenderer;
 
     private bool isTriggerDown = false;
     
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         background.gameObject.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
         shadow = GameObject.FindGameObjectWithTag("Shadow").gameObject;
-        //playerBody= GameObject.FindGameObjectWithTag("PlayerBody").gameObject;
         
         playerCharacterController = player.GetComponent<CharacterController>();
         shadowCharacterController = shadow.GetComponent<CharacterController>();
-        //playerBodyCharacterController = playerBody.GetComponent<CharacterController>();
-    }
 
-    // Update is called once per frame
+        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
+        shadowSpriteRenderer = shadow.GetComponent<SpriteRenderer>();
+    }
     
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -44,22 +43,20 @@ public class CharacterMove : FloatingJoystick
         background.gameObject.SetActive(false);
         base.OnPointerUp(eventData);
     }
-
-
-
+    
     void FixedUpdate()
     {
         if (isTriggerDown)
         {
             if (this.Horizontal < 0)
             {
-                player.transform.localScale = new Vector3(-0.54f, 0.54f, 0.54f);
-                shadow.transform.localScale = new Vector3(-0.43f, 0.43f, 0.43f);
+                playerSpriteRenderer.flipX = true;
+                shadowSpriteRenderer.flipX = true;
             }
             else
             {
-                player.transform.localScale = new Vector3(0.54f, 0.54f, 0.54f);
-                shadow.transform.localScale = new Vector3(0.43f, 0.43f, 0.43f);
+                playerSpriteRenderer.flipX = false;
+                shadowSpriteRenderer.flipX = false;
             }
             
             if (player.transform.position.z <= -5)

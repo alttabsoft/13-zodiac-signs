@@ -7,6 +7,7 @@ public class PlayerHit : MonoBehaviour
     [SerializeField] private CharacterController playerController;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject sword;
+    [SerializeField] private BulletStatus bulletStatus;
 
     private bool isAttacking = false;
     
@@ -59,6 +60,7 @@ public class PlayerHit : MonoBehaviour
         {
             StartCoroutine(HitEffect());
             other.gameObject.SetActive(false);
+            bulletStatus.bulletActiveState = false;
         }
     }
 }
