@@ -44,7 +44,7 @@ jobs:
           str2=""
 
           if [[ "$str1" != "$str2" ]]; then
-              echo $str1" 은 이미 있는 태그명"
+              echo $str1" 은 이미 있는 태그"
               echo "루프 시작"
               count=1
               while true; do
@@ -53,18 +53,18 @@ jobs:
                   result=$(git tag -l "$str1")
                   echo $str1
                   if [[ "$result" == "$str2" ]]; then
-                      echo "없는 태그명"
+                      echo "없는 태그"
                       echo "태깅 시작"
                       echo "태그를 시작합니다."
                       git tag -a "archive/${{github.head_ref}}-""$count" -m"" ${{github.head_ref}}
                       git push origin "archive/${{github.head_ref}}-""$count"
                       break
                   fi
-                      echo "있는 태그명"
+                      echo "있는 태그"
                       ((count++))
               done
           else
-              echo "존재하지 않는 태그명"
+              echo "존재하지 않는 태그"
               echo "태그를 시작합니다."
               echo archive/${{github.head_ref}}
               git tag -a archive/${{github.head_ref}} -m"" ${{github.head_ref}}
