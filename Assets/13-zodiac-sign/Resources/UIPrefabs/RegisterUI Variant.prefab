@@ -26,7 +26,7 @@ PrefabInstance:
     - target: {fileID: 2912562171559709732, guid: 22872265d58fa4747b338445e040d121,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4006896820238000669, guid: 22872265d58fa4747b338445e040d121,
         type: 3}
@@ -168,11 +168,38 @@ PrefabInstance:
       propertyPath: m_enableWordWrapping
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8791101260918169880, guid: 22872265d58fa4747b338445e040d121, type: 3}
     m_RemovedGameObjects:
     - {fileID: 5915520990360170704, guid: 22872265d58fa4747b338445e040d121, type: 3}
     - {fileID: 6047286250495916270, guid: 22872265d58fa4747b338445e040d121, type: 3}
     - {fileID: 1531586530507118881, guid: 22872265d58fa4747b338445e040d121, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2912562171559709732, guid: 22872265d58fa4747b338445e040d121,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8047772692430185690}
   m_SourcePrefab: {fileID: 100100000, guid: 22872265d58fa4747b338445e040d121, type: 3}
+--- !u!1 &8235206507767652368 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2912562171559709732, guid: 22872265d58fa4747b338445e040d121,
+    type: 3}
+  m_PrefabInstance: {fileID: 6494801384560880692}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8047772692430185690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8235206507767652368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b472d9eab60f4c7aa371397553c819c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emailInputField: {fileID: 0}
+  passWordInputField: {fileID: 0}
+  registerButton: {fileID: 0}
+  closeButton: {fileID: 0}
