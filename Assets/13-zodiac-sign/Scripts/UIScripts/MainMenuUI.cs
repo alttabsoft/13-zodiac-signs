@@ -8,11 +8,18 @@ namespace _13_zodiac_sign.Scripts.UIScripts
     public class MainMenuUI : MonoBehaviour
     {
         private GameObject _loginUI;
+        private GameObject _registerUI;
+
+        public GameObject RegisterUI
+        {
+            get => _registerUI;
+        }
         
         private void Start()
         {
             var buttons = GetComponentsInChildren<Button>(includeInactive: true); // 버튼별 역할 할당,
             _loginUI = transform.Find("LoginUI").gameObject;
+            _registerUI = transform.Find("RegisterUI").gameObject;
             foreach (var button in buttons)
             {
                 var buttonName = button.transform.name;

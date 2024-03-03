@@ -11,12 +11,15 @@ namespace _13_zodiac_sign.Scripts.UIScripts
         [SerializeField] private Button loginButton;
         [SerializeField] private Button closeButton;
         [SerializeField] private Button logoutButton;
+        [SerializeField] private Button registerUIButton;
         private Image _emailInfoImage;
         private TextMeshProUGUI _emailInfoText;
+        private MainMenuUI _mainMenuUI;
     
         // Start is called before the first frame update
         private void Start()
         {
+            _mainMenuUI = GetComponentInParent<MainMenuUI>();
             var buttons = GetComponentsInChildren<Button>(includeInactive: true);
             var tmpInputFields = GetComponentsInChildren<TMP_InputField>(includeInactive: true);
             var images = GetComponentsInChildren<Image>(includeInactive: true);
@@ -43,8 +46,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                     loginButton = button;
                     button.onClick.AddListener(() =>
                     {
-                        Debug.Log(
-                            "the email is :" + emailInputField.text + " | the password is :" + passWordInputField);
+                        // Debug.Log("the email is :" + emailInputField.text + " | the password is :" + passWordInputField);
                         var emailAndPassword = emailInputField.text + ":" + passWordInputField.text;
                         StartCoroutine(InteractToServerService.Login(emailInputField.text, passWordInputField.text));
                     });
@@ -65,6 +67,26 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                         StartCoroutine(InteractToServerService.Logout());
                     });
                 }
+                
+                if (buttonName == "RegisterUIButton")
+                {
+                    registerUIButton = button;
+                    var registerUI = _mainMenuUI.RegisterUI;
+
+                    button.onClick.AddListener(() =>
+                    {
+                        if (registerUI.activeSelf)
+                        {
+                            gameObject.SetActive(true);
+                            registerUI.SetActive(false);
+                        }
+                        else
+                        {
+                            gameObject.SetActive(false);
+                            registerUI.SetActive(true);
+                        }
+                    });
+                }
             }
             foreach (var image in images)
             {
@@ -76,6 +98,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                 }
             }
             #endregion
+            
         }
     
         private void Update()
@@ -85,7 +108,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
             if (!string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken) && UserInfoManager.Inst.IsUserEmailChanged) 
             {
                 UserInfoManager.Inst.IsUserEmailChanged = false;
-                Debug.Log("JWT 토큰 보임 :" + UserInfoManager.Inst.UserJwtToken);
+                // Debug.Log("JWT 토큰 보임 :" + UserInfoManager.Inst.UserJwtToken);
                 emailInputField.gameObject.SetActive(false);
                 passWordInputField.gameObject.SetActive(false);
             
@@ -103,7 +126,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
             else if (string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken)&& UserInfoManager.Inst.IsUserEmailChanged)
             {
                 UserInfoManager.Inst.IsUserEmailChanged = false;
-                Debug.Log("JWT 토큰 안보임 :"+UserInfoManager.Inst.UserJwtToken);
+                // Debug.Log("JWT 토큰 안보임 :"+UserInfoManager.Inst.UserJwtToken);
                 emailInputField.gameObject.SetActive(true);
                 passWordInputField.gameObject.SetActive(true);
                 

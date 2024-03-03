@@ -43,6 +43,15 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                         gameObject.SetActive(false); // RegisterUI 창 닫기
                     });
                 }
+
+                if (buttonName == "RegisterButton")
+                {
+                    registerButton = button;
+                    button.onClick.AddListener(() =>
+                    {
+                        StartCoroutine(InteractToServerService.Register(emailInputField.text, passWordInputField.text));
+                    });
+                }
             }
             #endregion
         }
