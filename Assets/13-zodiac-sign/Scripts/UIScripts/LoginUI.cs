@@ -33,7 +33,6 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                     passWordInputField = tmpInputField;
                     passWordInputField.contentType = TMP_InputField.ContentType.Password;
                 }
-
             }
             foreach (var button in buttons)
             {
@@ -44,7 +43,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                     button.onClick.AddListener(() =>
                     {
                         Debug.Log(
-                            "the email is :" + emailInputField.text + "| the password is :" + passWordInputField);
+                            "the email is :" + emailInputField.text + " | the password is :" + passWordInputField);
                         var emailAndPassword = emailInputField.text + ":" + passWordInputField.text;
                         StartCoroutine(InteractToServerService.Login(emailInputField.text, passWordInputField.text));
                     });
@@ -52,9 +51,12 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                 if (buttonName == "CloseButton")
                 {
                     closeButton = button;
+                    button.onClick.AddListener(() =>
+                    {
+                        gameObject.SetActive(false); // LoginUI 창 닫기
+                    });
                 }
             }
-
             foreach (var image in images)
             {
                 var imageName = image.transform.name;
@@ -69,20 +71,25 @@ namespace _13_zodiac_sign.Scripts.UIScripts
     
         private void Update()
         {
-            if (!string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken)) // JWT 토큰이 있다 == 정상적으로 로그인 되었다
+            if (!string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken) && UserInfoManager.Inst.IsUserEmailChanged) // JWT 토큰이 있다 == 정상적으로 로그인 되었다
             {
-                // Debug.Log("JWT 토큰 보임 :" + UserInfoManager.Inst.UserJwtToken);
+                UserInfoManager.Inst.IsUserEmailChanged = false;
+                Debug.Log("JWT 토큰 보임 :" + UserInfoManager.Inst.UserJwtToken);
                 emailInputField.gameObject.SetActive(false);
                 passWordInputField.gameObject.SetActive(false);
             
                 loginButton.gameObject.SetActive(false);
                 closeButton.gameObject.SetActive(true);
-            
+
+                _emailInfoText.text = UserInfoManager.Inst.UserEmail;
                 _emailInfoImage.gameObject.SetActive(true);
+                _emailInfoImage.gameObject.SetActive(true);
+                
             }
-            else if (string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken))
+            else if (string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken)&& UserInfoManager.Inst.IsUserEmailChanged)
             {
-                // Debug.Log("JWT 토큰 안보임 :"+UserInfoManager.Inst.UserJwtToken);
+                UserInfoManager.Inst.IsUserEmailChanged = false;
+                Debug.Log("JWT 토큰 안보임 :"+UserInfoManager.Inst.UserJwtToken);
                 emailInputField.gameObject.SetActive(true);
                 passWordInputField.gameObject.SetActive(true);
                 
