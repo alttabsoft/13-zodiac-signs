@@ -45,5 +45,12 @@ namespace _13_zodiac_sign.Scripts.UIScripts
             }
             yield return null;
         }
+
+        public static IEnumerator Logout()
+        {
+            UserInfoManager.Inst.UserJwtToken = null;
+            UserInfoManager.Inst.UserEmail = null;
+            yield return null;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace _13_zodiac_sign.Scripts.UIScripts
         [SerializeField] private TMP_InputField passWordInputField;
         [SerializeField] private Button loginButton;
         [SerializeField] private Button closeButton;
+        [SerializeField] private Button logoutButton;
         private Image _emailInfoImage;
         private TextMeshProUGUI _emailInfoText;
     
@@ -56,6 +57,14 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                         gameObject.SetActive(false); // LoginUI 창 닫기
                     });
                 }
+                if (buttonName == "LogoutButton")
+                {
+                    logoutButton = button;
+                    button.onClick.AddListener(() =>
+                    {
+                        StartCoroutine(InteractToServerService.Logout());
+                    });
+                }
             }
             foreach (var image in images)
             {
@@ -71,7 +80,9 @@ namespace _13_zodiac_sign.Scripts.UIScripts
     
         private void Update()
         {
-            if (!string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken) && UserInfoManager.Inst.IsUserEmailChanged) // JWT 토큰이 있다 == 정상적으로 로그인 되었다
+            // 로그인 정보 있을 때
+            // JWT 토큰이 있다 == 정상적으로 로그인 되었다
+            if (!string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken) && UserInfoManager.Inst.IsUserEmailChanged) 
             {
                 UserInfoManager.Inst.IsUserEmailChanged = false;
                 Debug.Log("JWT 토큰 보임 :" + UserInfoManager.Inst.UserJwtToken);
@@ -79,13 +90,16 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                 passWordInputField.gameObject.SetActive(false);
             
                 loginButton.gameObject.SetActive(false);
-                closeButton.gameObject.SetActive(true);
+                logoutButton.gameObject.SetActive(true);
 
                 _emailInfoText.text = UserInfoManager.Inst.UserEmail;
                 _emailInfoImage.gameObject.SetActive(true);
                 _emailInfoImage.gameObject.SetActive(true);
                 
             }
+            
+            // 로그인 정보 없을 때
+            // JWT 토큰이 없다
             else if (string.IsNullOrEmpty(UserInfoManager.Inst.UserJwtToken)&& UserInfoManager.Inst.IsUserEmailChanged)
             {
                 UserInfoManager.Inst.IsUserEmailChanged = false;
@@ -93,8 +107,8 @@ namespace _13_zodiac_sign.Scripts.UIScripts
                 emailInputField.gameObject.SetActive(true);
                 passWordInputField.gameObject.SetActive(true);
                 
+                logoutButton.gameObject.SetActive(false);
                 loginButton.gameObject.SetActive(true);
-                closeButton.gameObject.SetActive(false);
             
                 _emailInfoImage.gameObject.SetActive(false);
             }
