@@ -1,0 +1,84 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+
+namespace _13_zodiac_sign.Scripts.UIScripts
+{
+    public class InteractToServerService : MonoBehaviour
+    {
+        private const string ServerUrl = "http://localhost:8080";
+        
+
+        /// <summary>
+        /// 이메일 패스워드 입력받아 JWT 인증 토큰을 받아오는 동작을 수행합니다.
+        /// </summary>
+        /// <param name="email"> 유저 이메일 </param>
+        /// <param name="password"> 유저 패스워드 </param>
+        /// <returns></returns>
+        public static IEnumerator Login(String email, String password) {
+            UnityWebRequest unityWebRequest = UnityWebRequest.Get(ServerUrl+"/user");
+            
+            var emailAndPassword = email+":"+password;
+            string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes(emailAndPassword));
+            
+            unityWebRequest.SetRequestHeader("Authorization", "Basic "+ base64String);
+            unityWebRequest.SetRequestHeader("X-Requested-With", "XMLHttpRequest");
+            
+            yield return unityWebRequest.SendWebRequest();
+ 
+            if (unityWebRequest.result != UnityWebRequest.Result.Success) {
+                // Http 통신 실패에 대한 예외 처리 필요
+            }
+            else {
+                Debug.Log(unityWebRequest.downloadHandler.text);
+                
+                // Or retrieve results as binary data
+                String responseHeaderKeyValueString = "";
+                foreach (var responseHeader in unityWebRequest.GetResponseHeaders())
+                {
+                    responseHeaderKeyValueString += responseHeader.Key + ':' + responseHeader.Value + "\n";
+                }
+                Debug.Log(responseHeaderKeyValueString);
+                
+                UserInfoManager.Inst.UserJwtToken = unityWebRequest.GetResponseHeader("Authorization");
+                UserInfoManager.Inst.UserEmail = email;
+            }
+            yield return null;
+        }
+
+        public static IEnumerator Logout()
+        {
+            UserInfoManager.Inst.UserJwtToken = null;
+            UserInfoManager.Inst.UserEmail = null;
+            yield return null;
+        }
+        
+        public static IEnumerator Register(String email, String password)
+        {
+            Debug.Log("Let's Start Register");
+            string postData = "{\"email\" : \""+email+"\", \"password\" : \""+password+"\"}";
+            byte[] bytePostData = Encoding.UTF8.GetBytes(postData);
+            UnityWebRequest unityWebRequest = UnityWebRequest.PostWwwForm(ServerUrl+"/register","");
+            UploadHandlerRaw uploader = new UploadHandlerRaw(bytePostData);
+            uploader.contentType = "application/json";
+            unityWebRequest.uploadHandler = uploader;
+            yield return unityWebRequest.SendWebRequest(); // 보내는 명령이 들어가는 곳
+            
+            if (unityWebRequest.result != UnityWebRequest.Result.Success) {
+                // Http 통신 실패에 대한 예외 처리 필요
+                Debug.Log(ServerUrl + "/register");
+                Debug.Log("Failed");
+                Debug.Log(unityWebRequest.error);
+            }
+            else {
+                // 통신 성공 시 로그인 창으로 이동
+                Debug.Log("Succeed");
+                Debug.Log(unityWebRequest.downloadHandler.text);
+            }
+            yield return null;
+        }
+    }
+}
