@@ -1,0 +1,76 @@
+name: Check Merged Branch
+
+on:
+  pull_request:
+    types: [closed]
+    branches : [main]
+
+jobs:
+  check_merged_branch:
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: ./.github/workflows/scripts
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref : ${{ github.event.pull_request.head.sha }}
+
+      # - name:
+      #   run: | 
+      #     chmod +x my-script.sh
+      #     ./my-script.sh
+
+      - name: Get merged branches
+        run: |
+          echo ${{ github.ref_name }}
+          echo ${{ github.event.pull_request.head.sha }}
+          echo ${{ github.sha }}
+
+      - name: have a tag
+        run: |
+          # git branch --contains ${{ github.event.pull_request.head.sha }}
+          git branch --contains ${{ github.sha }}
+          echo archive/${{github.head_ref}}
+
+      - name: create a tag
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"}
+
+          str1=$(git tag -l "archive/${{github.head_ref}}")
+          str2=""
+
+          if [[ "$str1" != "$str2" ]]; then
+              echo $str1" 은 이미 있는 태그"
+              echo "루프 시작"
+              count=1
+              while true; do
+                  str1="archive/${{github.head_ref}}-""$count"
+                  str2=""
+                  result=$(git tag -l "$str1")
+                  echo $str1
+                  if [[ "$result" == "$str2" ]]; then
+                      echo "없는 태그"
+                      echo "태깅 시작"
+                      echo "태그를 시작합니다."
+                      git tag -a "archive/${{github.head_ref}}-""$count" -m"" ${{github.head_ref}}
+                      git push origin "archive/${{github.head_ref}}-""$count"
+                      break
+                  fi
+                      echo "있는 태그"
+                      ((count++))
+              done
+          else
+              echo "존재하지 않는 태그"
+              echo "태그를 시작합니다."
+              echo archive/${{github.head_ref}}
+              git tag -a archive/${{github.head_ref}} -m"" ${{github.head_ref}}
+              git push origin archive/${{github.head_ref}}
+          fi
+        
+      - name: 브랜치 삭제
+        run: |
+          git push origin -d ${{github.head_ref}}
