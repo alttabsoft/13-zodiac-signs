@@ -3,7 +3,7 @@ name: Check Merged Branch
 on:
   pull_request:
     types: [closed]
-    branches : [main]
+    branches : [develop]
 
 jobs:
   check_merged_branch:
