@@ -9,7 +9,8 @@ public class PlayerHit : MonoBehaviour
     [SerializeField] private CharacterController playerController;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject sword;
-    
+    [SerializeField] private BulletStatus bulletStatus;
+
     private bool isAttacking = false;
     
     public void SwordAttack()
@@ -35,7 +36,7 @@ public class PlayerHit : MonoBehaviour
     private IEnumerator MobRespawn(GameObject mob)
     {
         mob.SetActive(false);
-        mob.transform.position = new Vector3(1.2f, 0.9f, -6f);
+        mob.transform.position = new Vector3(1.54f, 0.9f, -5.01f);
         yield return new WaitForSeconds(0.5f);
         mob.SetActive(true);
     }
@@ -59,6 +60,13 @@ public class PlayerHit : MonoBehaviour
                 StartCoroutine(MobRespawn(other.gameObject));
                 StartCoroutine(ResetHpBar(other.gameObject));
             }
+        }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            StartCoroutine(HitEffect());
+            other.gameObject.SetActive(false);
+            bulletStatus.bulletActiveState = false;
         }
     }
 

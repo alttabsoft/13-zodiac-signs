@@ -6,26 +6,29 @@ using UnityEngine.EventSystems;
 public class CharacterMove : FloatingJoystick
 {
     private GameObject player;
-    //[SerializeField] GameObject playerBody;
+    private GameObject shadow;
 
     private CharacterController playerCharacterController;
-    //private CharacterController playerBodyCharacterController;
+    private CharacterController shadowCharacterController;
+
+    private SpriteRenderer playerSpriteRenderer;
+    private SpriteRenderer shadowSpriteRenderer;
 
     private bool isTriggerDown = false;
     
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         background.gameObject.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player").gameObject;
-        //playerBody= GameObject.FindGameObjectWithTag("PlayerBody").gameObject;
+        shadow = GameObject.FindGameObjectWithTag("Shadow").gameObject;
         
         playerCharacterController = player.GetComponent<CharacterController>();
-        //playerBodyCharacterController = playerBody.GetComponent<CharacterController>();
-    }
+        shadowCharacterController = shadow.GetComponent<CharacterController>();
 
-    // Update is called once per frame
+        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
+        shadowSpriteRenderer = shadow.GetComponent<SpriteRenderer>();
+    }
     
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -40,28 +43,40 @@ public class CharacterMove : FloatingJoystick
         background.gameObject.SetActive(false);
         base.OnPointerUp(eventData);
     }
-
-
-
+    
     void FixedUpdate()
     {
         if (isTriggerDown)
         {
-            if (player.transform.position.z <= -6.07)
+            if (this.Horizontal < 0)
             {
-                if (player.transform.position.z >= -6.62429)
+                playerSpriteRenderer.flipX = true;
+                shadowSpriteRenderer.flipX = true;
+            }
+            else
+            {
+                playerSpriteRenderer.flipX = false;
+                shadowSpriteRenderer.flipX = false;
+            }
+            
+            if (player.transform.position.z <= -5)
+            {
+                if (player.transform.position.z >= -5.48)
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                 }
                 else
                 { 
                     if (this.Vertical >= 0)
                     {
                         playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                        shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                     }
                     else
                     {
                         playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                        shadowCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
                     }
                 }
             }
@@ -70,10 +85,12 @@ public class CharacterMove : FloatingJoystick
                 if (this.Vertical <= 0)
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, this.Vertical).normalized * Time.deltaTime);
                 }
                 else
                 {
                     playerCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
+                    shadowCharacterController.Move(new Vector3(this.Horizontal, 0, 0).normalized * Time.deltaTime);
                 }
             }
         }
