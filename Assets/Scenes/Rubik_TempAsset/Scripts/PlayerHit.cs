@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHit : MonoBehaviour
 {
-    //public PlayerHpBar playerHpBar;
+    public PlayerHpBar playerHpBar;
     
     [SerializeField] private CharacterController playerController;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -79,21 +79,21 @@ public class PlayerHit : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         mobApproach.hpBarInstance.SetActive(true);
         
-        //MobHpBar hpBar = mobApproach.hpBarInstance.GetComponent<MobHpBar>();
+        MobHpBar hpBar = mobApproach.hpBarInstance.GetComponent<MobHpBar>();
 
-        //hpBar.currentHp = 10;
+        hpBar.currentHp = 10;
     }
 
     private void DamageMob(GameObject mob)
     {
         MobApproach mobApproach = mob.GetComponent<MobApproach>();
-        //MobHpBar hpBar = mobApproach.hpBarInstance.GetComponent<MobHpBar>();
+        MobHpBar hpBar = mobApproach.hpBarInstance.GetComponent<MobHpBar>();
 
-        //hpBar.currentHp -= 10;
+        hpBar.currentHp -= 10;
     }
 
     private void DamagePlayer()
     {
-        //playerHpBar.currentHp -= 10;
+        playerHpBar.currentHp -= 10;
     }
 }
